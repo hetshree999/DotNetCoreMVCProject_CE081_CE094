@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -55,6 +56,7 @@ namespace EmployeeManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            HttpContext.Session.Remove("Email");
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
@@ -70,13 +72,13 @@ namespace EmployeeManagementSystem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
-                    if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    HttpContext.Session.SetString("Email", model.Email);
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -85,9 +87,32 @@ namespace EmployeeManagementSystem.Controllers
                         return RedirectToAction("index", "employees");
                     }
                 }
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                ModelState.AddModelError(string.Empty, "Incorrect Username or Password.");
             }
+
             return View(model);
         }
+        //public async Task<IActionResult> Login(LoginViewModel model, String returnUrl)
+        //{
+        //    if(ModelState.IsValid)
+        //    {
+        //        var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+        //        if(result.Succeeded)
+        //        {
+        //            HttpContext.Session.SetString("Email", model.Email);
+        //            if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        //            {
+        //                return Redirect(returnUrl);
+        //            }
+        //            else
+        //            {
+        //                return RedirectToAction("index", "employees");
+        //            }
+        //        }
+        //        ModelState.AddModelError(String.Empty, "Invalid Login Attempt");
+        //    }
+        //    return View(model);
+        //}
     }
 }

@@ -1,4 +1,6 @@
-﻿@inject SignInManager<IdentityUser> signInManager
+﻿@*@inject SignInManager<IdentityUser> signInManager*@
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor Accessor
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,27 +27,44 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
-                        @if(signInManager.IsSignedIn(User))
+                        @{ bool val = true;
+                            if (@Accessor.HttpContext.Session.GetString("Email") == null)
+                            {
+                                val = false;
+                            }
+                        }
+                        @if (val)
                         {
-                            <li class="nav-item">
-                                <form method="post" asp-controller="account" asp-action="logout">
-                                    <button type="submit" style="width:auto"
-                                            class="nav-link btn btn-link py-0">
-                                        Logout @User.Identity.Name
-                                    </button>
-                                </form>
-                            </li>
+                    <li class="nav-item">
+                        <form method="post" asp-controller="departments" asp-action="index">
+
+                            <button type="submit" class="nav-link btn text-right btn-primary">
+                                Departments
+                            </button>
+
+                        </form>
+                    </li>
+                    <li class="nav-item" style="margin-left:5px;">
+                        <form method="post" asp-controller="account" asp-action="logout">
+
+                            <button type="submit" class="nav-link btn text-right btn-primary">
+                                Logout
+                            </button>
+
+                        </form>
+                    </li>
+                    
+                            
                         }
                         else
                         {
-                            @*<li class="nav-item">
-                                <a class="nav-link" asp-controller="account" asp-action="register">Register</a>
-                            </li>*@
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="account" asp-action="login">Login</a>
-                            </li>
+                            
+                                <li class="nav-item" style="margin-left:50px">
+                                    <a asp-action="Login" asp-controller="account" class="btn btn-primary">Login</a>
+                                </li>
+                               
                         }
+
 
                     </ul>
                 </div>

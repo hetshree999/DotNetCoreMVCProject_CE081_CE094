@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmployeeManagementSystem.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagementSystem.Controllers
 {
-    
     public class EmployeesController : Controller
     {
         private readonly MyAppDbContext _context;
@@ -58,7 +56,7 @@ namespace EmployeeManagementSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DOB,DepartmentId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,DOB,Password,DepartmentId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +90,7 @@ namespace EmployeeManagementSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DOB,DepartmentId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,DOB,Password,DepartmentId")] Employee employee)
         {
             if (id != employee.Id)
             {

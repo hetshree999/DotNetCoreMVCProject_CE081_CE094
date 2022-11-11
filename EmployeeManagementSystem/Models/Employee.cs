@@ -16,9 +16,7 @@ namespace EmployeeManagementSystem.Models
         [EmailAddress]
         public string Email { get; set; }
         public DateTime DOB { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
     }

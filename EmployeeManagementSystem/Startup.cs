@@ -29,6 +29,7 @@ namespace EmployeeManagementSystem
                 options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeDbConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<MyAppDbContext>();
+            services.AddSession();
             services.AddControllersWithViews();
         }
 
@@ -44,6 +45,8 @@ namespace EmployeeManagementSystem
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 
